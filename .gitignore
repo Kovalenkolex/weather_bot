@@ -1,0 +1,10 @@
+# created by virtualenv automatically
+/Lib
+/Scripts
+/.idea
+/.venv
+basa.sql
+pyvenv.cfg
+Notes.txt
+test.py
+
