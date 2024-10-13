@@ -64,7 +64,7 @@ def save_place(message):
     cur.close()
     conn.close()
     bot.send_message(message.chat.id, f'Сохранено место "{place_name1}" с координатами: \n'
-                                      f'Широта {la} Долгота {lo}')
+                                      f'Широта {la}, долгота {lo}')
 
 
 @bot.message_handler(commands=['start', 'main'])
@@ -154,7 +154,7 @@ def sethome(message):
 @bot.message_handler(commands=['help'])
 def help(message):
     bot.send_message(message.chat.id, '<b>Помощь с ботом:</b> \n'
-                                      'Знаю команды /weather, /sethome, Привет \n'
+                                      'Знаю команды Привет, /weather, /sethome \n'
                                       '<em>Если что-то пошло не так, и бот перестал отвечать, '
                                       'введите еще раз команду /start</em>', parse_mode='html')
 
