@@ -107,15 +107,55 @@ def start(message):
     btn2 = types.InlineKeyboardButton('Москва', callback_data='msk')
     markup.row(btn1, btn2)
     btn3 = types.InlineKeyboardButton('Тольятти', callback_data='tlt')
-    btn4 = types.InlineKeyboardButton('Другое', callback_data='else')
+    btn4 = types.InlineKeyboardButton('Другое место', callback_data='else')
     markup.row(btn3, btn4)
     bot.send_message(message.chat.id, 'Привет! Чтобы получить прогноз погоды, выберите город:', reply_markup=markup)
 
 
+@bot.message_handler(commands=['weather'])
+def home_weather(message):
+    conn = sqlite3.connect('basa.sql')
+    cur = conn.cursor()
+    cur.execute("SELECT latitude, longitude FROM users WHERE tg_id=?", (message.from_user.id,))
+    result = cur.fetchone()
+    if result:
+        latitude_value, longitude_value = result
+        # print(latitude_value, longitude_value, result)
+
+        if latitude_value is None or longitude_value is None:
+            # Если широты или долготы нет, запускаем функцию latitude
+            bot.send_message(message.chat.id, 'Сохраненного места нет, давайте это исправим. '
+                                                       'Укажите координаты места.\n'
+                                                       'Сначала введите широту, используя точку как разделитель \n'
+                                                       'Например 12.123 (значение от -90 до 90):')
+            bot.register_next_step_handler(message, latitude)
+        else:
+            # Если значения есть, запускаем функцию weather
+            # weather(latitude_value, longitude_value)
+            bot.send_message(message.chat.id, f'Сохраненные координаты: широта {latitude_value}, '
+                                              f'долгота {longitude_value} \n'
+                                              f'Там сейчас {round(weather(latitude_value, longitude_value))} ℃')
+    else:
+        bot.send_message(message.chat.id, 'Сохраненного места нет, давайте это исправим. '
+                                          'Укажите координаты места.\n'
+                                          'Сначала введите широту, используя точку как разделитель \n'
+                                          'Например 12.123 (значение от -90 до 90):')
+        bot.register_next_step_handler(message, latitude)
+    # weather(,)
+
+
+@bot.message_handler(commands=['sethome'])
+def sethome(message):
+    bot.send_message(message.chat.id, 'Укажите координаты места.\n'
+                                      'Сначала введите широту, используя точку как разделитель \n'
+                                      'Например 12.123 (значение от -90 до 90):')
+    bot.register_next_step_handler(message, latitude)
 @bot.message_handler(commands=['help'])
 def help(message):
-    bot.send_message(message.chat.id, '<b>Помощь</b> с ботом: \n'
-                                      'Знаю команды <em>/help,</em> Привет', parse_mode='html')
+    bot.send_message(message.chat.id, '<b>Помощь с ботом:</b> \n'
+                                      'Знаю команды /weather, /sethome, Привет \n'
+                                      '<em>Если что-то пошло не так, и бот перестал отвечать, '
+                                      'введите еще раз команду /start</em>', parse_mode='html')
 
 
 #Действия при нажатии на кнопки
