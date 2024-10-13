@@ -116,10 +116,10 @@ def start(message):
 def home_weather(message):
     conn = sqlite3.connect('basa.sql')
     cur = conn.cursor()
-    cur.execute("SELECT latitude, longitude FROM users WHERE tg_id=?", (message.from_user.id,))
+    cur.execute("SELECT latitude, longitude, place_name FROM users WHERE tg_id=?", (message.from_user.id,))
     result = cur.fetchone()
     if result:
-        latitude_value, longitude_value = result
+        latitude_value, longitude_value, place_name = result
         # print(latitude_value, longitude_value, result)
 
         if latitude_value is None or longitude_value is None:
@@ -132,8 +132,8 @@ def home_weather(message):
         else:
             # Если значения есть, запускаем функцию weather
             # weather(latitude_value, longitude_value)
-            bot.send_message(message.chat.id, f'Сохраненные координаты: широта {latitude_value}, '
-                                              f'долгота {longitude_value} \n'
+            bot.send_message(message.chat.id, f'Сохраненное место "{place_name}", '
+                                              f'координаты: широта {latitude_value}, долгота {longitude_value} \n'
                                               f'Там сейчас {round(weather(latitude_value, longitude_value))} ℃')
     else:
         bot.send_message(message.chat.id, 'Сохраненного места нет, давайте это исправим. '
