@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'weather_image' // Имя Docker-образа
-        REPO_URL = 'git@github.com:Kovalenkolex/weather_bot.git' // SSH URL твоего репозитория
+        REPO_URL = 'git@github.com:Kovalenkolex/weather_bot.git' // SSH URL твоего репозитория 1
         BRANCH_NAME = 'dev' // Ветка, с которой будем работать
         PROJECT_DIR = '/srv/weather_bot'
     }
