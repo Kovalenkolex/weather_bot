@@ -31,7 +31,7 @@ pipeline {
                     sh '''
                     docker stop weather_bot || true
                     docker rm weather_bot || true
-                    docker run --restart unless-stopped -d --name weather_bot -p 80:80 ${DOCKER_IMAGE}
+                    docker run --restart unless-stopped -d --name weather_bot -v /opt/weather_bot/sql:/sql -p 80:80 ${DOCKER_IMAGE}
                     '''
                 }
             }

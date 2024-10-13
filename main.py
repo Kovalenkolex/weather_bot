@@ -55,7 +55,7 @@ def longitude(message):
 
 def save_place(message):
     place_name1 = message.text.strip()
-    conn = sqlite3.connect('basa.sql')
+    conn = sqlite3.connect('/sql/basa.sql')
     cur = conn.cursor()
     update_statement = 'UPDATE users SET latitude=?, longitude=?, place_name=? WHERE tg_id = ?'
     cur.execute(update_statement, (la, lo, place_name1, message.from_user.id))
@@ -70,7 +70,7 @@ def save_place(message):
 def start(message):
     # global numero
     # Создание БД
-    conn = sqlite3.connect('basa.sql')
+    conn = sqlite3.connect('/sql/basa.sql')
     cur = conn.cursor()
     cur.execute('CREATE TABLE IF NOT EXISTS users (tg_id int, first_name varchar(50), last_name varchar(50),'
                 'latitude float, longitude float, place_name varchar(50), payment int DEFAULT 0)')
