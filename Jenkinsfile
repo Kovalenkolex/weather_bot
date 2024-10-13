@@ -12,7 +12,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 dir("${PROJECT_DIR}") {
-                    git branch: "${BRANCH_NAME}", url: "${REPO_URL}", credentialId: "kovalenkolex"
+                    git branch: "${BRANCH_NAME}", url: "${REPO_URL}", credentialsId: "kovalenkolex"
                 }
             }
         }
