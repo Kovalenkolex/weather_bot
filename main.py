@@ -109,7 +109,7 @@ def start(message):
     btn3 = types.InlineKeyboardButton('Тольятти', callback_data='tlt')
     btn4 = types.InlineKeyboardButton('Другое место', callback_data='else')
     markup.row(btn3, btn4)
-    bot.send_message(message.chat.id, 'Привет! Чтобы получить прогноз погоды, выберите город:', reply_markup=markup)
+    bot.send_message(message.chat.id, 'Привет! Чтобы получить информацию о погоде, выберите город:', reply_markup=markup)
 
 
 @bot.message_handler(commands=['weather'])
