@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'weather_image' // Имя Docker-образа
-        REPO_URL = 'https://github.com/Kovalenkolex/weather_bot.git' // URL твоего репозитория
+        REPO_URL = 'git@github.com:Kovalenkolex/weather_bot.git' // SSH URL твоего репозитория
         BRANCH_NAME = 'dev' // Ветка, с которой будем работать
         PROJECT_DIR = '/srv/weather_bot'
     }
@@ -12,7 +12,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 dir("${PROJECT_DIR}") {
-                    git branch: "${BRANCH_NAME}", url: "${REPO_URL}"
+                    git branch: "${BRANCH_NAME}", url: "${REPO_URL}", credentialId: "kovalenkolex"
                 }
             }
         }
