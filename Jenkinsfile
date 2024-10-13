@@ -5,7 +5,7 @@ pipeline {
         DOCKER_IMAGE = 'weather_image' // Имя Docker-образа
         REPO_URL = 'https://github.com/Kovalenkolex/weather_bot.git' // URL твоего репозитория
         BRANCH_NAME = 'dev' // Ветка, с которой будем работать
-        PROJECT_DIR = '/opt/weather_bot'
+        PROJECT_DIR = '/srv/weather_bot'
     }
 
     stages {
@@ -31,7 +31,7 @@ pipeline {
                     sh '''
                     docker stop weather_bot || true
                     docker rm weather_bot || true
-                    docker run --restart unless-stopped -d --name weather_bot -v /opt/weather_bot/sql:/sql -p 80:80 ${DOCKER_IMAGE}
+                    docker run --restart unless-stopped -d --name weather_bot -v /srv/weather_bot/sql:/sql -p 80:80 ${DOCKER_IMAGE}
                     '''
                 }
             }
