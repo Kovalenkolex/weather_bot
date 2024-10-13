@@ -55,6 +55,7 @@ def longitude(message):
 
 def save_place(message):
     place_name1 = message.text.strip()
+    # conn = sqlite3.connect('basa.sql')
     conn = sqlite3.connect('/sql/basa.sql')
     cur = conn.cursor()
     update_statement = 'UPDATE users SET latitude=?, longitude=?, place_name=? WHERE tg_id = ?'
@@ -68,8 +69,8 @@ def save_place(message):
 
 @bot.message_handler(commands=['start', 'main'])
 def start(message):
-    # global numero
     # Создание БД
+    # conn = sqlite3.connect('basa.sql')
     conn = sqlite3.connect('/sql/basa.sql')
     cur = conn.cursor()
     cur.execute('CREATE TABLE IF NOT EXISTS users (tg_id int, first_name varchar(50), last_name varchar(50),'
@@ -82,7 +83,6 @@ def start(message):
     # print(f'tgid = {tgid[0]}')
     ids = str(tgid)[1:-1].replace('(', '').replace(')',
                                                    '').replace(',', '').split(' ')
-    # print(f'vot ono{type(ids[0])}')
     if ids == ['']:
         int_ids = [None]
     else:
@@ -114,7 +114,8 @@ def start(message):
 
 @bot.message_handler(commands=['weather'])
 def home_weather(message):
-    conn = sqlite3.connect('basa.sql')
+    # conn = sqlite3.connect('basa.sql')
+    conn = sqlite3.connect('/sql/basa.sql')
     cur = conn.cursor()
     cur.execute("SELECT latitude, longitude, place_name FROM users WHERE tg_id=?", (message.from_user.id,))
     result = cur.fetchone()
