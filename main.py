@@ -64,7 +64,7 @@ def save_place(message):
     cur.close()
     conn.close()
     bot.send_message(message.chat.id, f'Сохранено место "{place_name1}" с координатами: \n'
-                                      f'Широта {la}, долгота {lo}.'
+                                      f'Широта {la}, долгота {lo}.\n'
                                       f'Чтобы получить информацию о погоде там, введите /weather')
 
 
