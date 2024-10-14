@@ -64,7 +64,8 @@ def save_place(message):
     cur.close()
     conn.close()
     bot.send_message(message.chat.id, f'Сохранено место "{place_name1}" с координатами: \n'
-                                      f'Широта {la}, долгота {lo}')
+                                      f'Широта {la}, долгота {lo}.'
+                                      f'Чтобы получить информацию о погоде там, введите /weather')
 
 
 @bot.message_handler(commands=['start', 'main'])
@@ -94,11 +95,11 @@ def start(message):
     else:
         cur.execute('INSERT INTO users (tg_id, first_name, last_name) VALUES (?, ?, ?)',
                 (message.from_user.id, message.from_user.first_name, message.from_user.last_name))
-    cur.execute('SELECT * FROM users')
-    users = cur.fetchall()
-    conn.commit()
-    cur.close()
-    conn.close()
+    # cur.execute('SELECT * FROM users')
+    # users = cur.fetchall()
+    # conn.commit()
+    # cur.close()
+    # conn.close()
     # print(users)
     
     # Вывод стартовых кнопок
