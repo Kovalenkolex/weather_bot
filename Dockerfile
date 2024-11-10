@@ -7,6 +7,5 @@ WORKDIR /srv/weather_bot/bot
 COPY . /srv/weather_bot/bot
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN echo "Running bot with TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}"
 
 CMD ["python", "main.py"]
