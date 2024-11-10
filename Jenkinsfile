@@ -35,8 +35,9 @@ pipeline {
                     docker run --restart unless-stopped -d \
                     --name weather_bot \
                     -v /srv/weather_bot/sql:/sql \
-                    -p 8081:80 ${DOCKER_IMAGE} \
-                    -e TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+                    -p 8081:80 \
+                    -e TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN} \
+                    ${DOCKER_IMAGE}
                     '''
                 }
             }
