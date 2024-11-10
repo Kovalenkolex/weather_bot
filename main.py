@@ -1,13 +1,13 @@
 import types
 import telebot
-import webbrowser
 from telebot import types
 import sqlite3
 import openmeteo_requests
 from openmeteo_sdk.Variable import Variable
+import os
 
 
-bot = telebot.TeleBot('7296472862:AAHw8kxmi_m7eVGa6wQUBBhKe3Y9A0jrkNs')
+bot = telebot.TeleBot(os.getenv("TELEGRAM_BOT_TOKEN"))
 place_name1 = ''
 la = ''
 lo = ''
@@ -47,11 +47,6 @@ def longitude(message):
     mark.row(btn1, btn2)
     bot.send_message(message.chat.id, 'Сохранить это место?', reply_markup=mark)
 
-# def question(message):
-    # global lo
-    # global la
-    # bot.send_message(message.chat.id, f'Там сейчас {round(weather(la, lo))} ℃')
-
 
 def save_place(message):
     place_name1 = message.text.strip()
@@ -79,28 +74,17 @@ def start(message):
     cur.execute('SELECT tg_id FROM users')
     tgid = cur.fetchall()
     # Добавление инфы про пользователя в БД
-    # print(f'tip mfi {type(message.from_user.id)}')
-    # print(f'type tgid {type(tgid)}')
-    # print(f'tgid = {tgid[0]}')
     ids = str(tgid)[1:-1].replace('(', '').replace(')',
                                                    '').replace(',', '').split(' ')
     if ids == ['']:
         int_ids = [None]
     else:
         int_ids = [int(item) for item in ids]
-    # print(int_ids)
-    # print(type(int_ids))
     if message.from_user.id in int_ids:
         pass
     else:
         cur.execute('INSERT INTO users (tg_id, first_name, last_name) VALUES (?, ?, ?)',
                 (message.from_user.id, message.from_user.first_name, message.from_user.last_name))
-    # cur.execute('SELECT * FROM users')
-    # users = cur.fetchall()
-    # conn.commit()
-    # cur.close()
-    # conn.close()
-    # print(users)
     
     # Вывод стартовых кнопок
     markup = types.InlineKeyboardMarkup()
@@ -132,8 +116,6 @@ def home_weather(message):
                                                        'Например 12.123 (значение от -90 до 90):')
             bot.register_next_step_handler(message, latitude)
         else:
-            # Если значения есть, запускаем функцию weather
-            # weather(latitude_value, longitude_value)
             bot.send_message(message.chat.id, f'Сохраненное место "{place_name}", '
                                               f'координаты: широта {latitude_value}, долгота {longitude_value} \n'
                                               f'Там сейчас {round(weather(latitude_value, longitude_value))} ℃')
@@ -143,7 +125,6 @@ def home_weather(message):
                                           'Сначала введите широту, используя точку как разделитель \n'
                                           'Например 12.123 (значение от -90 до 90):')
         bot.register_next_step_handler(message, latitude)
-    # weather(,)
 
 
 @bot.message_handler(commands=['sethome'])
@@ -165,7 +146,6 @@ def help(message):
 def callback_message(callback):
     global la
     global lo
-    # global place_name1
     if callback.data == 'msk':
         la = 55.7522
         lo = 37.6156
@@ -182,23 +162,12 @@ def callback_message(callback):
         bot.send_message(callback.message.chat.id, 'Укажите координаты места.\n'
                                                     'Сначала введите широту, используя точку как разделитель \n'
                                                    'Например 12.123 (значение от -90 до 90):')
-        # bot.send_message(callback.message.chat.id, 'Введите широту')
         bot.register_next_step_handler(callback.message, latitude)
-        # la = message.text.strip()
-        # la = float(input())
-        # bot.send_message(callback.message.chat.id, 'Введите долготу')
-        # lo = float(input())
-        # la = message.text.strip()
     elif callback.data == 'yes':
         bot.send_message(callback.message.chat.id, 'Введите название для этого места:')
-        # place_name1 = callback.message.text.strip()
         bot.register_next_step_handler(callback.message, save_place)
-
-        ## place_name1 = callback.message.text.strip()
-
     elif callback.data == 'no':
         bot.send_message(callback.message.chat.id, 'Окей, не сохраняем')
-
 
 
 # В случае рукописного текста

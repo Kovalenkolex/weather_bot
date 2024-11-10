@@ -2,10 +2,11 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'weather_image' // Имя Docker-образа
-        REPO_URL = 'git@github.com:Kovalenkolex/weather_bot.git' // SSH URL твоего репозитория пожалуйста
-        BRANCH_NAME = 'dev' // Ветка, с которой будем работать
+        DOCKER_IMAGE = 'weather_image'
+        REPO_URL = 'git@github.com:Kovalenkolex/weather_bot.git'
+        BRANCH_NAME = 'dev'
         PROJECT_DIR = '/srv/weather_bot'
+        TELEGRAM_BOT_TOKEN = credentials('TELEGRAM_BOT_TOKEN')
     }
 
     stages {
