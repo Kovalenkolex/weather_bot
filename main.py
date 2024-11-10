@@ -8,7 +8,7 @@ import os
 
 
 ton = os.getenv("TELEGRAM_BOT_TOKEN")
-bot = telebot.TeleBot('7296472862:AAHw8kxmi_m7eVGa6wQUBBhKe3Y9A0jrkNs')
+bot = telebot.TeleBot(os.getenv("TELEGRAM_BOT_TOKEN"))
 place_name1 = ''
 la = ''
 lo = ''
