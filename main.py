@@ -7,7 +7,6 @@ from openmeteo_sdk.Variable import Variable
 import os
 
 
-ton = os.getenv("TELEGRAM_BOT_TOKEN")
 bot = telebot.TeleBot(os.getenv("TELEGRAM_BOT_TOKEN"))
 place_name1 = ''
 la = ''
@@ -175,7 +174,7 @@ def greet(message):
     if message.text.lower() == 'привет':
         bot.send_message(message.chat.id, f'Привет, {message.from_user.first_name} {message.from_user.last_name}!')
     else:
-        bot.send_message(message.chat.id, f'{ton} Я не знаю такую команду, попробуй другую')
+        bot.send_message(message.chat.id, 'Я не знаю такую команду, попробуй другую')
 
 
 bot.polling(non_stop=True)
