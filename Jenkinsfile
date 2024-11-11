@@ -19,19 +19,9 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Stop And Clean') {
             steps {
                 script {
-                    // Сборка нового образа
-                    sh 'docker build -t ${DOCKER_IMAGE} .'
-                }
-            }
-        }
-
-        stage('Run Docker Container') {
-            steps {
-                script {
-
                     // Проверяем, существует ли контейнер weather_bot, и если существует, останавливаем и удаляем его
                     def containerExists = sh(script: "docker ps -a -q -f name=weather_bot", returnStdout: true).trim()
 
@@ -47,6 +37,22 @@ pipeline {
                     if (imageExists) {
                         sh "docker rmi weather_image || true"
                     }
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Сборка нового образа
+                    sh 'docker build -t ${DOCKER_IMAGE} .'
+                }
+            }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                script {
                     sh '''
                     docker run --restart unless-stopped -d \
                     --name weather_bot \
