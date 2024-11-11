@@ -12,6 +12,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
+                // Клонирование репозитория с GitHub
                 dir("${PROJECT_DIR}") {
                     git branch: "${BRANCH_NAME}", url: "${REPO_URL}", credentialsId: "kovalenkolex"
                 }
@@ -21,6 +22,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+                    // Сборка нового образа
                     sh 'docker build -t ${DOCKER_IMAGE} .'
                 }
             }
@@ -29,9 +31,11 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
+                    // Остановка контейнера, его удаление, удаление старого образа, запуск нового контейнера
                     sh '''
                     docker stop weather_bot || true
                     docker rm weather_bot || true
+                    docker rmi weather_image || true
                     docker run --restart unless-stopped -d \
                     --name weather_bot \
                     -v /srv/weather_bot/sql:/sql \
