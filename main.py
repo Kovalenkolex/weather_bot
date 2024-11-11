@@ -14,6 +14,7 @@ lo = ''
 
 
 def weather(lati, longi):
+    # Запрос к api openmeteo
     om = openmeteo_requests.Client()
     params = {
         "latitude": {lati},
@@ -29,6 +30,7 @@ def weather(lati, longi):
     return current_temperature_2m.Value()
 
 def latitude(message):
+    # Прием широты и запрос долготы у пользователя
     global la
     la = message.text.strip()
     bot.send_message(message.chat.id, 'Введите долготу, используя точку как разделитель\n'
@@ -36,6 +38,7 @@ def latitude(message):
     bot.register_next_step_handler(message, longitude)
 
 def longitude(message):
+    # Прием долготы у пользователя и вывод температуры в точке
     global lo
     global la
     lo = message.text.strip()
@@ -49,6 +52,7 @@ def longitude(message):
 
 
 def save_place(message):
+    # Сохранение места в базу данных и вывод инфы польз-лю
     place_name1 = message.text.strip()
     # conn = sqlite3.connect('basa.sql')
     conn = sqlite3.connect('/sql/basa.sql')
@@ -65,7 +69,7 @@ def save_place(message):
 
 @bot.message_handler(commands=['start', 'main'])
 def start(message):
-    # Создание БД
+    # Создание БД при запуске бота (при её отсутствии)
     # conn = sqlite3.connect('basa.sql')
     conn = sqlite3.connect('/sql/basa.sql')
     cur = conn.cursor()
@@ -86,7 +90,7 @@ def start(message):
         cur.execute('INSERT INTO users (tg_id, first_name, last_name) VALUES (?, ?, ?)',
                 (message.from_user.id, message.from_user.first_name, message.from_user.last_name))
     
-    # Вывод стартовых кнопок
+    # Вывод стартовых кнопок и надписи
     markup = types.InlineKeyboardMarkup()
     btn1 = types.InlineKeyboardButton('Санкт-Петербург', callback_data='spb')
     btn2 = types.InlineKeyboardButton('Москва', callback_data='msk')
@@ -99,6 +103,7 @@ def start(message):
 
 @bot.message_handler(commands=['weather'])
 def home_weather(message):
+    # Отображение погоды в сохраненном месте
     # conn = sqlite3.connect('basa.sql')
     conn = sqlite3.connect('/sql/basa.sql')
     cur = conn.cursor()
@@ -107,7 +112,7 @@ def home_weather(message):
     if result:
         latitude_value, longitude_value, place_name = result
         if latitude_value is None or longitude_value is None:
-            # Если широты или долготы нет, запускаем функцию latitude
+            # Если широты или долготы нет, запуск latitude
             bot.send_message(message.chat.id, 'Сохраненного места нет, давайте это исправим. '
                                                        'Укажите координаты места.\n'
                                                        'Сначала введите широту, используя точку как разделитель \n'
@@ -127,19 +132,21 @@ def home_weather(message):
 
 @bot.message_handler(commands=['sethome'])
 def sethome(message):
+    # Запуск сохранения места
     bot.send_message(message.chat.id, 'Укажите координаты места.\n'
                                       'Сначала введите широту, используя точку как разделитель \n'
                                       'Например 12.123 (значение от -90 до 90):')
     bot.register_next_step_handler(message, latitude)
 @bot.message_handler(commands=['help'])
 def help(message):
+    # Отображение доп инф
     bot.send_message(message.chat.id, '<b>Помощь с ботом:</b> \n'
                                       'Знаю команды Привет, /weather, /sethome \n'
                                       '<em>Если что-то пошло не так, и бот перестал отвечать, '
                                       'введите еще раз команду /start</em>', parse_mode='html')
 
 
-#Действия при нажатии на кнопки
+#Действия при нажатии на стартовые кнопки
 @bot.callback_query_handler(func=lambda callback: True)
 def callback_message(callback):
     global la

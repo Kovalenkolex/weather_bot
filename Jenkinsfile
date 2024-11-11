@@ -12,8 +12,31 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
+                // Клонирование репозитория с GitHub
                 dir("${PROJECT_DIR}") {
                     git branch: "${BRANCH_NAME}", url: "${REPO_URL}", credentialsId: "kovalenkolex"
+                }
+            }
+        }
+
+        stage('Stop And Clean') {
+            steps {
+                script {
+                    // Проверяем, существует ли контейнер weather_bot, и если существует, останавливаем и удаляем его
+                    def containerExists = sh(script: "docker ps -a -q -f name=weather_bot", returnStdout: true).trim()
+
+                    if (containerExists) {
+                        sh '''
+                        docker stop weather_bot || true
+                        docker rm weather_bot || true
+                        '''
+                    }
+                    // Проверяем, существует ли образ weather_image, и если существует, удаляем его
+                    def imageExists = sh(script: "docker images -q weather_image", returnStdout: true).trim()
+
+                    if (imageExists) {
+                        sh "docker rmi weather_image || true"
+                    }
                 }
             }
         }
@@ -21,6 +44,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+                    // Сборка нового образа
                     sh 'docker build -t ${DOCKER_IMAGE} .'
                 }
             }
@@ -30,8 +54,6 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    docker stop weather_bot || true
-                    docker rm weather_bot || true
                     docker run --restart unless-stopped -d \
                     --name weather_bot \
                     -v /srv/weather_bot/sql:/sql \
