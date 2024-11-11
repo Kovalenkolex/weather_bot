@@ -31,11 +31,23 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    // Остановка контейнера, его удаление, удаление старого образа, запуск нового контейнера
+
+                    // Проверяем, существует ли контейнер weather_bot, и если существует, останавливаем и удаляем его
+                    def containerExists = sh(script: "docker ps -a -q -f name=weather_bot", returnStdout: true).trim()
+
+                    if (containerExists) {
+                        sh '''
+                        docker stop weather_bot || true
+                        docker rm weather_bot || true
+                        '''
+                    }
+                    // Проверяем, существует ли образ weather_image, и если существует, удаляем его
+                    def imageExists = sh(script: "docker images -q weather_image", returnStdout: true).trim()
+
+                    if (imageExists) {
+                        sh "docker rmi weather_image || true"
+                    }
                     sh '''
-                    docker stop weather_bot || true
-                    docker rm weather_bot || true
-                    docker rmi weather_image || true
                     docker run --restart unless-stopped -d \
                     --name weather_bot \
                     -v /srv/weather_bot/sql:/sql \
