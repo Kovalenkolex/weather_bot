@@ -3,7 +3,7 @@
 <p align="left">
   <img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/docker-colored.svg" width="36" height="36" alt="Docker" />
   <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" width="36" height="36" alt="Telegram" />
-  <img src="https://open-meteo.com/images/open-meteo-logo.png" width="36" height="36" alt="OpenMeteo" />
+  <img src="https://www.svgrepo.com/show/374997/weather.svg" width="36" height="36" alt="OpenMeteo" />
   <img src="https://upload.wikimedia.org/wikipedia/commons/9/97/Sqlite-square-icon.svg" width="36" height="36" alt="SQLite3" />
 </p>
 
