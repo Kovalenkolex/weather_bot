@@ -29,6 +29,7 @@ def weather(lati, longi):
         filter(lambda x: x.Variable() == Variable.temperature and x.Altitude() == 2, current_variables))
     return current_temperature_2m.Value()
 
+
 def latitude(message):
     # Прием широты и запрос долготы у пользователя
     global la
@@ -36,6 +37,7 @@ def latitude(message):
     bot.send_message(message.chat.id, 'Введите долготу, используя точку как разделитель\n'
                                       'Например 12.123 (значение от -180 до 180):')
     bot.register_next_step_handler(message, longitude)
+
 
 def longitude(message):
     # Прием долготы у пользователя и вывод температуры в точке
@@ -137,6 +139,8 @@ def sethome(message):
                                       'Сначала введите широту, используя точку как разделитель \n'
                                       'Например 12.123 (значение от -90 до 90):')
     bot.register_next_step_handler(message, latitude)
+
+
 @bot.message_handler(commands=['help'])
 def help(message):
     # Отображение доп инф
@@ -146,9 +150,10 @@ def help(message):
                                       'введите еще раз команду /start</em>', parse_mode='html')
 
 
-#Действия при нажатии на стартовые кнопки
+
 @bot.callback_query_handler(func=lambda callback: True)
 def callback_message(callback):
+    # Действия при нажатии на стартовые кнопки
     global la
     global lo
     if callback.data == 'msk':
@@ -175,9 +180,9 @@ def callback_message(callback):
         bot.send_message(callback.message.chat.id, 'Окей, не сохраняем')
 
 
-# В случае рукописного текста
 @bot.message_handler()
 def greet(message):
+    # В случае рукописного текста
     if message.text.lower() == 'привет':
         bot.send_message(message.chat.id, f'Привет, {message.from_user.first_name} {message.from_user.last_name}!')
     else:
