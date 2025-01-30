@@ -69,6 +69,18 @@ def save_place(message):
                                       f'Чтобы получить информацию о погоде там, введите /weather')
 
 
+@bot.message_handler(content_types=['location'])
+def handle_location(message):
+    global lo
+    global la
+    if message.location is not None:
+        la = message.location.latitude
+        lo = message.location.longitude
+        bot.send_message(message.chat.id, f'Там сейчас {round(weather(la, lo))} ℃')
+    else:
+        bot.send_message(message.chat.id, f'Что-то пошло не так, попробуйте ещё раз')
+
+
 @bot.message_handler(commands=['start', 'main'])
 def start(message):
     # Создание БД при запуске бота (при её отсутствии)
