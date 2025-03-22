@@ -6,6 +6,7 @@ import openmeteo_requests
 from openmeteo_sdk.Variable import Variable
 import os
 
+#9
 
 bot = telebot.TeleBot(os.getenv("TELEGRAM_BOT_TOKEN"))
 place_name1 = ''
